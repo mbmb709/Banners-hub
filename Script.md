@@ -138,7 +138,7 @@ end)
 local DiscordLabel = Instance.new("TextLabel", MainFrame)
 DiscordLabel.Size = UDim2.new(1, 0, 0, 60)
 DiscordLabel.Position = UDim2.new(0, 0, 0.75, 0)
-DiscordLabel.Text = "Join pur Discord server to support us https://discord.gg/UtmYPJPfPm"
+DiscordLabel.Text = "Join our Discord server to support us https://discord.gg/UtmYPJPfPm"
 DiscordLabel.TextWrapped = true
 DiscordLabel.TextScaled = true
 DiscordLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
