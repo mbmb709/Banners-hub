@@ -6,6 +6,9 @@ local correctKey = "Slapbattlesnewscript5772984901"
 local keyAccepted = false
 
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
@@ -17,24 +20,23 @@ KeyFrame.Size = UDim2.new(0,300,0,180)
 KeyFrame.Position = UDim2.new(0.5,-150,0.5,-90)
 KeyFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
-local KeyTitle = Instance.new("TextLabel", KeyFrame)
-KeyTitle.Size = UDim2.new(1,0,0,40)
-KeyTitle.BackgroundTransparency = 1
-KeyTitle.Text = "Enter Script Key"
-KeyTitle.TextScaled = true
-KeyTitle.TextColor3 = Color3.fromRGB(255,255,255)
+local Title = Instance.new("TextLabel", KeyFrame)
+Title.Size = UDim2.new(1,0,0,40)
+Title.BackgroundTransparency = 1
+Title.Text = "Enter Script Key"
+Title.TextScaled = true
+Title.TextColor3 = Color3.new(1,1,1)
 
 local KeyBox = Instance.new("TextBox", KeyFrame)
 KeyBox.Size = UDim2.new(0.8,0,0,40)
 KeyBox.Position = UDim2.new(0.1,0,0.35,0)
-KeyBox.PlaceholderText = "Enter Key Here"
+KeyBox.PlaceholderText = "Enter Key"
 
 local Submit = Instance.new("TextButton", KeyFrame)
 Submit.Size = UDim2.new(0.8,0,0,30)
 Submit.Position = UDim2.new(0.1,0,0.6,0)
 Submit.Text = "Submit"
 
--- COPY LINK BUTTON
 local GetKey = Instance.new("TextButton", KeyFrame)
 GetKey.Size = UDim2.new(0.8,0,0,30)
 GetKey.Position = UDim2.new(0.1,0,0.8,0)
@@ -44,8 +46,6 @@ GetKey.MouseButton1Click:Connect(function()
 	if setclipboard then
 		setclipboard("https://work.ink/2n0B/banners-hub")
 		GetKey.Text = "Copied!"
-	else
-		GetKey.Text = "Clipboard not supported"
 	end
 end)
 
@@ -60,109 +60,135 @@ end)
 
 repeat task.wait() until keyAccepted
 
-
 ------------------------------------------------
--- Banner's Hub / SLAP BATTLES SCRIPT
-------------------------------------------------
-
-local UIS = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
-local PlayerGui = player:WaitForChild("PlayerGui")
-
 -- VARIABLES
+------------------------------------------------
+
 local infiniteJump = false
 local walkSpeed = 16
-local autoWin = false
-local detecting = false
-local greenWinPart = nil
 
--- GUI
+------------------------------------------------
+-- MAIN GUI
+------------------------------------------------
+
 local ScreenGui = Instance.new("ScreenGui", PlayerGui)
 ScreenGui.Name = "BannersHub"
 
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 300, 0, 400)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.BorderSizePixel = 0
-MainFrame.Visible = true
+MainFrame.Size = UDim2.new(0,300,0,350)
+MainFrame.Position = UDim2.new(0.5,-150,0.5,-175)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
--- Title
-local Title = Instance.new("TextLabel", MainFrame)
-Title.Size = UDim2.new(1, 0, 0, 50)
-Title.BackgroundTransparency = 1
-Title.Text = "Banner's Hub"
-Title.TextScaled = true
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+------------------------------------------------
+-- MINI UI
+------------------------------------------------
 
--- Infinite Jump Button
+local MiniButton = Instance.new("TextButton", ScreenGui)
+MiniButton.Size = UDim2.new(0,60,0,60)
+MiniButton.Position = UDim2.new(0,20,0.5,-30)
+MiniButton.BackgroundColor3 = Color3.fromRGB(255,140,0)
+MiniButton.Text = "Hub"
+MiniButton.TextScaled = true
+MiniButton.Visible = false
+
+MiniButton.MouseButton1Click:Connect(function()
+	MainFrame.Visible = true
+	MiniButton.Visible = false
+end)
+
+------------------------------------------------
+-- CLOSE BUTTON
+------------------------------------------------
+
+local Close = Instance.new("TextButton", MainFrame)
+Close.Size = UDim2.new(0,30,0,30)
+Close.Position = UDim2.new(1,-35,0,5)
+Close.Text = "X"
+Close.BackgroundColor3 = Color3.fromRGB(200,60,60)
+
+Close.MouseButton1Click:Connect(function()
+	MainFrame.Visible = false
+	MiniButton.Visible = true
+end)
+
+------------------------------------------------
+-- TITLE
+------------------------------------------------
+
+local Title2 = Instance.new("TextLabel", MainFrame)
+Title2.Size = UDim2.new(1,0,0,40)
+Title2.BackgroundTransparency = 1
+Title2.Text = "Banner's Hub"
+Title2.TextScaled = true
+Title2.TextColor3 = Color3.new(1,1,1)
+
+------------------------------------------------
+-- INFINITE JUMP
+------------------------------------------------
+
 local IJButton = Instance.new("TextButton", MainFrame)
-IJButton.Size = UDim2.new(0.8, 0, 0, 40)
-IJButton.Position = UDim2.new(0.1, 0, 0.2, 0)
+IJButton.Size = UDim2.new(0.8,0,0,40)
+IJButton.Position = UDim2.new(0.1,0,0.2,0)
 IJButton.Text = "Infinite Jump: OFF"
-IJButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 IJButton.MouseButton1Click:Connect(function()
-    infiniteJump = not infiniteJump
-    IJButton.Text = "Infinite Jump: " .. (infiniteJump and "ON" or "OFF")
+	infiniteJump = not infiniteJump
+	IJButton.Text = "Infinite Jump: "..(infiniteJump and "ON" or "OFF")
 end)
 
--- WalkSpeed
-local SpeedSlider = Instance.new("TextBox", MainFrame)
-SpeedSlider.Size = UDim2.new(0.8, 0, 0, 40)
-SpeedSlider.Position = UDim2.new(0.1, 0, 0.35, 0)
-SpeedSlider.PlaceholderText = "Set WalkSpeed (default 16)"
-
-SpeedSlider.FocusLost:Connect(function()
-    local val = tonumber(SpeedSlider.Text)
-    if val then
-        walkSpeed = val
-        player.Character.Humanoid.WalkSpeed = walkSpeed
-    end
+UIS.JumpRequest:Connect(function()
+	if infiniteJump then
+		local char = player.Character
+		if char and char:FindFirstChildOfClass("Humanoid") then
+			char:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+		end
+	end
 end)
 
--- Auto Win Button
-local AWButton = Instance.new("TextButton", MainFrame)
-AWButton.Size = UDim2.new(0.8, 0, 0, 40)
-AWButton.Position = UDim2.new(0.1, 0, 0.5, 0)
-AWButton.Text = "Auto Win: OFF"
-AWButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+------------------------------------------------
+-- SPEED
+------------------------------------------------
 
-AWButton.MouseButton1Click:Connect(function()
-    autoWin = not autoWin
-    AWButton.Text = "Auto Win: " .. (autoWin and "ON" or "OFF")
+local SpeedBox = Instance.new("TextBox", MainFrame)
+SpeedBox.Size = UDim2.new(0.8,0,0,40)
+SpeedBox.Position = UDim2.new(0.1,0,0.35,0)
+SpeedBox.PlaceholderText = "Set Speed"
+
+SpeedBox.FocusLost:Connect(function()
+	local num = tonumber(SpeedBox.Text)
+	if num and player.Character then
+		player.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = num
+	end
 end)
 
--- Discord Page
-local DiscordLabel = Instance.new("TextLabel", MainFrame)
-DiscordLabel.Size = UDim2.new(1, 0, 0, 60)
-DiscordLabel.Position = UDim2.new(0, 0, 0.75, 0)
-DiscordLabel.Text = "Join our Discord server to support us https://discord.gg/UtmYPJPfPm"
-DiscordLabel.TextWrapped = true
-DiscordLabel.TextScaled = true
-DiscordLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
-DiscordLabel.BackgroundTransparency = 1
+------------------------------------------------
+-- TELEPORT
+------------------------------------------------
 
--- FUNCTIONS
-UIS.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Space and infiniteJump then
-        local char = player.Character
-        if char and char:FindFirstChild("Humanoid") then
-            char.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        end
-    end
+local TPButton = Instance.new("TextButton", MainFrame)
+TPButton.Size = UDim2.new(0.8,0,0,40)
+TPButton.Position = UDim2.new(0.1,0,0.5,0)
+TPButton.Text = "Teleport to Win"
+
+TPButton.MouseButton1Click:Connect(function()
+	if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+		for _,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "GreenWinPart" then
+				player.Character.HumanoidRootPart.CFrame = v.CFrame
+			end
+		end
+	end
 end)
 
-RunService.Heartbeat:Connect(function()
-    if autoWin and player.Character then
-        local char = player.Character
-        if char:FindFirstChild("HumanoidRootPart") then
-            for _, part in pairs(workspace:GetChildren()) do
-                if part.Name == "GreenWinPart" then
-                    char.HumanoidRootPart.CFrame = part.CFrame
-                end
-            end
-        end
-    end
-end)
+------------------------------------------------
+-- DISCORD PAGE
+------------------------------------------------
+
+local Discord = Instance.new("TextLabel", MainFrame)
+Discord.Size = UDim2.new(1,0,0,60)
+Discord.Position = UDim2.new(0,0,0.75,0)
+Discord.BackgroundTransparency = 1
+Discord.TextWrapped = true
+Discord.TextScaled = true
+Discord.Text = "Join pur Discord server to support us https://discord.gg/UtmYPJPfPm"
+Discord.TextColor3 = Color3.fromRGB(0,255,255)
